@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <script src="https://kit.fontawesome.com/f5f790ff5f.js" crossorigin="anonymous"></script>
+
+    <title>Ninja Gold</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row"  style="width:300px">
+            <label for="gold">Your Gold:</label>
+            <input type="text" placeholder="{{session.gold}}" disabled>
+        </div>
+        <h2>you have {{15 -session.rounds}} more attempts to win 500!</h2>
+        <div class="row">
+            <form class="building" action="/process_money" method="POST">
+                <h3>Farm</h3>
+                <p>(win 10-20 golds)</p>
+                <input type="hidden" name="building" value="farm" />
+                <input type="submit" role="button" value="Find Gold!"/>
+            </form>
+            <form class="building" action="/process_money" method="POST">
+                <h3>Cave</h3>
+                <p>(win 5-10 golds)</p>
+                <input type="hidden" name="building" value="cave" />
+                <input type="submit" role="button" value="Find Gold!"/>
+            </form>
+            <form class="building" action="/process_money" method="POST">
+                <h3>House</h3>
+                <p>(win 2-5 golds)</p>
+                <input type="hidden" name="building" value="house" />
+                <input type="submit" role="button" value="Find Gold!"/>
+            </form>
+            <form class="building" action="/process_money" method="POST">
+                <h3>Casino</h3>
+                <p>(win/lose 0-50 golds)</p>
+                <input type="hidden" name="building" value="casino" />
+                <input type="submit" role="button" value="Find Gold!"/>
+            </form>
+        </div>
+        <h1 class="row" style="justify-content: center; align-items: center;">Win or Lose?
+        </h1>
+        <div>
+        {% if session.gold > 500 %}
+            <div class="row">
+                <h1 class="win">You won!</h1>
+                <a class="button" href="/reset">Restart Game!</a>
+            </div>
+        {% elif session.rounds > 14 %}
+            <div class="row">
+                <h1 class="lose">You lost!</h1>
+                <a class="button" href="/reset">Restart Game!</a>
+            </div>
+        {%endif%}
+        </div>
+        <div class="row">
+            <div class="activities">
+                {%for result in session.results|reverse %}
+                    <p class="{{result.result}}">{{result.message}}</p>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
